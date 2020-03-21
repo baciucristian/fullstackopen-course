@@ -6,6 +6,6 @@ Modern web development with JS, Node.js, React, Redux, MongoDB, REST, GraphQL & 
 
 ## Part 0 Assignments
 
-* [0.4](/part0/0-4.png) | 21-03-2020
-* [0.5](/part0/0-5.png) | 21-03-2020
-* [0.6](/part0/0-6.png) | 21-03-2020
+* [0.4](/part0/0.4.png) | 21-03-2020
+* [0.5](/part0/0.5.png) | 21-03-2020
+* [0.6](/part0/0.6.png) | 21-03-2020
