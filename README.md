@@ -1,4 +1,4 @@
-# fullstackopen-course
+# Full stack open 2020
 
 This is my repository, featuring my progress, work, and solutions for the Fullstack Developer Course 2020 @ University of Helsinki
 
