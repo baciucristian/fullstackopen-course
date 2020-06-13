@@ -4,8 +4,10 @@ This is my repository, featuring my progress, work, and solutions for the Fullst
 
 Modern web development with JS, Node.js, React, Redux, MongoDB, REST, GraphQL & Typescript
 
-## Part 0 Assignments
+## Exercises done :white_check_mark:
 
-* [0.4](/part0/0.4.png) | 21-03-2020
-* [0.5](/part0/0.5.png) | 21-03-2020
-* [0.6](/part0/0.6.png) | 21-03-2020
+| Part      | Exercises  |
+| --------- | ---------- |
+| 0         | 6/6        |
+| 1         | 11/14      |
+| **Total** | **17/198** |
