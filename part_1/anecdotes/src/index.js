@@ -9,6 +9,8 @@ const App = props => {
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState([0, 0, 0, 0, 0, 0]);
 
+  const indexOfMaxPoints = points.indexOf(Math.max(...points));
+
   const handleVoteClick = () => {
     const copyOfPoints = [...points];
     copyOfPoints[selected] += 1;
@@ -22,10 +24,15 @@ const App = props => {
 
   return (
     <>
+      <h1>Anecdote of the day</h1>
       <div>{props.anecdotes[selected]}</div>
       <div>has {String(points[selected])} votes</div>
       <Button handleClick={handleVoteClick} text="vote"></Button>
       <Button handleClick={handleAnecdoteClick} text="next anecdote"></Button>
+
+      <h1>Anecdote of the day</h1>
+      <div>{props.anecdotes[indexOfMaxPoints]}</div>
+      <div>has {String(points[indexOfMaxPoints])} votes</div>
     </>
   );
 };
