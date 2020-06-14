@@ -7,8 +7,15 @@ const Button = ({handleClick, text}) => (
 
 const App = props => {
   const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState([0, 0, 0, 0, 0, 0]);
 
-  const handleClick = () => {
+  const handleVoteClick = () => {
+    const copyOfPoints = [...points];
+    copyOfPoints[selected] += 1;
+    setPoints(copyOfPoints);
+  };
+
+  const handleAnecdoteClick = () => {
     const randomNumber = Math.floor(Math.random() * 6);
     setSelected(randomNumber);
   };
@@ -16,7 +23,9 @@ const App = props => {
   return (
     <>
       <div>{props.anecdotes[selected]}</div>
-      <Button handleClick={handleClick} text="next anecdote"></Button>
+      <div>has {String(points[selected])} votes</div>
+      <Button handleClick={handleVoteClick} text="vote"></Button>
+      <Button handleClick={handleAnecdoteClick} text="next anecdote"></Button>
     </>
   );
 };
