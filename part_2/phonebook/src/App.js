@@ -1,4 +1,6 @@
 import React, {useState} from 'react';
+import Filter from './components/Filter';
+import Form from './components/Form';
 import Persons from './components/Persons';
 
 const App = () => {
@@ -40,8 +42,9 @@ const App = () => {
   };
 
   const handleFilterChange = event => {
+    const searchedPerson = event.target.value.trim().toLowerCase();
     const filteredPersons = persons.filter(person =>
-      person.name.includes(event.target.value.trim()),
+      person.name.toLowerCase().includes(searchedPerson),
     );
     setSelectedPersons(filteredPersons);
   };
@@ -49,23 +52,14 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      <div>
-        Filter shown with: <input onChange={handleFilterChange} />
-      </div>
+      <Filter handleChange={handleFilterChange} />
 
       <h2>Add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input onChange={handleNumberChange} />
-        </div>
-
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Form
+        handleSubmit={addPerson}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+      />
 
       <h2>Numbers</h2>
       <Persons persons={selectedPersons} />
