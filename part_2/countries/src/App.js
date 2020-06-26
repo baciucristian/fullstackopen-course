@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import Filter from './components/Filter';
 import Countries from './components/Countries';
-import ErrorMessage from './components/ErrorMessage';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -22,12 +21,11 @@ const App = () => {
     );
     setQueryCountries(queryCountries);
   };
-
   return (
     <>
       <Filter handleChange={handleQueryChange} />
-      {queryCountries.length > 10 ? (
-        <ErrorMessage />
+      {queryCountries.length > 10 || queryCountries.length === 0 ? (
+        <p>Too many matches, specify another filter!</p>
       ) : (
         <Countries countries={queryCountries} />
       )}

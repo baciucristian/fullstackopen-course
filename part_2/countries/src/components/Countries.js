@@ -1,20 +1,19 @@
 import React from 'react';
 import Country from './Country';
+import CountryName from './CountryName';
 
 const Countries = ({countries}) => {
-  return (
-    <>
+  if (countries.length === 1) {
+    return <Country country={countries[0]} />;
+  } else {
+    return (
       <ul>
         {countries.map(country => (
-          <Country
-            key={country.alpha2Code}
-            country={country}
-            lenghtOfCountries={countries.length}
-          />
+          <CountryName key={country.alpha2Code} country={country} />
         ))}
       </ul>
-    </>
-  );
+    );
+  }
 };
 
 export default Countries;
