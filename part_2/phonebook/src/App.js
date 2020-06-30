@@ -7,16 +7,24 @@ import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [selectedPersons, setSelectedPersons] = useState([]);
+  const [personsToShow, setPersonsToShow] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
       setPersons(initialPersons);
-      setSelectedPersons(initialPersons);
+      setPersonsToShow(initialPersons);
     });
   }, []);
+
+  const handleDeleteClick = (name, id) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personService.deleteData(id);
+      setPersons(persons.filter(person => person.id !== id));
+      setPersonsToShow(persons.filter(person => person.id !== id));
+    }
+  };
 
   const addPerson = event => {
     event.preventDefault();
@@ -32,7 +40,7 @@ const App = () => {
     else {
       personService.create(personObject).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson));
-        setSelectedPersons(persons.concat(returnedPerson));
+        setPersonsToShow(persons.concat(returnedPerson));
       });
     }
   };
@@ -50,7 +58,7 @@ const App = () => {
     const filteredPersons = persons.filter(person =>
       person.name.toLowerCase().includes(searchedPerson),
     );
-    setSelectedPersons(filteredPersons);
+    setPersonsToShow(filteredPersons);
   };
 
   return (
@@ -66,7 +74,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={selectedPersons} />
+      <Persons persons={personsToShow} handleDeleteClick={handleDeleteClick} />
     </>
   );
 };
