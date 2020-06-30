@@ -7,14 +7,13 @@ import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-  const [personsToShow, setPersonsToShow] = useState([]);
+  const [searchedWord, setSearchedWord] = useState('');
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
       setPersons(initialPersons);
-      setPersonsToShow(initialPersons);
     });
   }, []);
 
@@ -22,7 +21,6 @@ const App = () => {
     if (window.confirm(`Delete ${name} ?`)) {
       personService.deleteData(id);
       setPersons(persons.filter(person => person.id !== id));
-      setPersonsToShow(persons.filter(person => person.id !== id));
     }
   };
 
@@ -40,7 +38,6 @@ const App = () => {
     else {
       personService.create(personObject).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson));
-        setPersonsToShow(persons.concat(returnedPerson));
       });
     }
   };
@@ -54,11 +51,8 @@ const App = () => {
   };
 
   const handleFilterChange = event => {
-    const searchedPerson = event.target.value.trim().toLowerCase();
-    const filteredPersons = persons.filter(person =>
-      person.name.toLowerCase().includes(searchedPerson),
-    );
-    setPersonsToShow(filteredPersons);
+    const searchedWord = event.target.value.trim().toLowerCase();
+    setSearchedWord(searchedWord);
   };
 
   return (
@@ -74,7 +68,11 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} handleDeleteClick={handleDeleteClick} />
+      <Persons
+        persons={persons}
+        searchedWord={searchedWord}
+        handleDeleteClick={handleDeleteClick}
+      />
     </>
   );
 };
