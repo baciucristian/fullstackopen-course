@@ -12,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationColor, setNotificationColor] = useState('');
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
@@ -21,9 +22,14 @@ const App = () => {
 
   const handleDeleteClick = (name, id) => {
     if (window.confirm(`Delete ${name} ?`)) {
-      personService
-        .deleteData(id)
-        .then(setPersons(persons.filter(person => person.id !== id)));
+      personService.deleteData(id).then(data => {
+        setPersons(persons.filter(person => person.id !== id));
+        setNotificationColor('green');
+        setNotificationMessage(`${name} was deleted`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      });
     }
   };
 
@@ -56,15 +62,29 @@ const App = () => {
                   : person,
               ),
             );
+            setNotificationColor('green');
             setNotificationMessage('Updated ' + personObject.name);
             setTimeout(() => {
               setNotificationMessage(null);
             }, 5000);
+          })
+          .catch(error => {
+            setNotificationColor('red');
+            setNotificationMessage(
+              `Information of '${personWithSameName.name}' has been removed from server`,
+            );
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 5000);
+            setPersons(
+              persons.filter(person => person.id !== personWithSameName.id),
+            );
           });
       }
     } else
       personService.create(personObject).then(returnedPerson => {
         setPersons(persons.concat(returnedPerson));
+        setNotificationColor('green');
         setNotificationMessage('Added ' + personObject.name);
         setTimeout(() => {
           setNotificationMessage(null);
@@ -88,7 +108,7 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
-      <Notification message={notificationMessage} />
+      <Notification message={notificationMessage} color={notificationColor} />
       <Filter handleChange={handleFilterChange} />
 
       <h2>Add a new</h2>
