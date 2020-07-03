@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import Filter from './components/Filter';
 import Form from './components/Form';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 import personService from './services/personService';
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [searchedWord, setSearchedWord] = useState('');
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll().then(initialPersons => {
@@ -54,12 +56,20 @@ const App = () => {
                   : person,
               ),
             );
+            setNotificationMessage('Updated ' + personObject.name);
+            setTimeout(() => {
+              setNotificationMessage(null);
+            }, 5000);
           });
       }
     } else
-      personService
-        .create(personObject)
-        .then(returnedPerson => setPersons(persons.concat(returnedPerson)));
+      personService.create(personObject).then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson));
+        setNotificationMessage('Added ' + personObject.name);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
+      });
   };
 
   const handleNameChange = event => {
@@ -78,6 +88,7 @@ const App = () => {
   return (
     <>
       <h1>Phonebook</h1>
+      <Notification message={notificationMessage} />
       <Filter handleChange={handleFilterChange} />
 
       <h2>Add a new</h2>
