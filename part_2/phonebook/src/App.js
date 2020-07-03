@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import Filter from './components/Filter';
 import Form from './components/Form';
 import Persons from './components/Persons';
-import personService from './services/persons';
+import personService from './services/personService';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -19,8 +19,9 @@ const App = () => {
 
   const handleDeleteClick = (name, id) => {
     if (window.confirm(`Delete ${name} ?`)) {
-      personService.deleteData(id);
-      setPersons(persons.filter(person => person.id !== id));
+      personService
+        .deleteData(id)
+        .then(setPersons(persons.filter(person => person.id !== id)));
     }
   };
 
@@ -34,12 +35,31 @@ const App = () => {
 
     const hasSameName = persons.some(person => person.name === newName);
 
-    if (hasSameName) alert(`${newName} is already added to phonebook!`);
-    else {
-      personService.create(personObject).then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson));
-      });
-    }
+    if (hasSameName) {
+      const confirmMessage = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`,
+      );
+      const personWithSameName = persons.find(
+        person => person.name === newName,
+      );
+
+      if (confirmMessage) {
+        personService
+          .update(personWithSameName.id, personObject)
+          .then(returnedPerson => {
+            setPersons(
+              persons.map(person =>
+                person.name === personWithSameName.name
+                  ? returnedPerson
+                  : person,
+              ),
+            );
+          });
+      }
+    } else
+      personService
+        .create(personObject)
+        .then(returnedPerson => setPersons(persons.concat(returnedPerson)));
   };
 
   const handleNameChange = event => {
