@@ -76,9 +76,17 @@ const generateId = () => Math.floor(Math.random() * 1000000000 + 1);
 app.post('/api/persons', (req, res) => {
   const body = req.body;
 
-  if (!body.name) {
+  if (!body.name || !body.number) {
     return res.status(400).json({
-      error: 'name missing',
+      error: 'data missing',
+    });
+  }
+
+  const hasSameName = persons.some(person => person.name === body.name);
+
+  if (hasSameName) {
+    return res.status(400).json({
+      error: 'name must be unique',
     });
   }
 
@@ -89,7 +97,6 @@ app.post('/api/persons', (req, res) => {
   };
 
   persons = persons.concat(person);
-
   res.json(person);
 });
 
