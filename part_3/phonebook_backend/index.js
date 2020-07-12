@@ -29,21 +29,23 @@ app.get('/info', (req, res) => {
   res.end();
 });
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   const id = req.params.id;
 
-  Person.findById(id).then(person => res.json(person));
+  Person.findById(id)
+    .then(person => res.json(person))
+    .catch(error => next(error));
 });
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id;
 
-  Person.findByIdAndRemove(id).then(result => {
-    res.status(204).end();
-  });
+  Person.findByIdAndRemove(id)
+    .then(result => {
+      res.status(204).end();
+    })
+    .catch(error => next(error));
 });
-
-const generateId = () => Math.floor(Math.random() * 1000000000 + 1);
 
 app.post('/api/persons', (req, res) => {
   const body = req.body;
@@ -63,6 +65,24 @@ app.post('/api/persons', (req, res) => {
     res.json(savedPerson);
   });
 });
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({error: 'unknown endpoint'});
+};
+
+app.use(unknownEndpoint);
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message);
+
+  if (error.name === 'CastError' && error.kind == 'ObjectId') {
+    return res.status(400).send({error: 'malformatted id'});
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
