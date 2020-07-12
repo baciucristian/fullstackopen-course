@@ -30,16 +30,17 @@ app.get('/info', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
+  const id = req.params.id;
 
   Person.findById(id).then(person => res.json(person));
 });
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id);
-  persons = persons.filter(person => person.id !== id);
+  const id = req.params.id;
 
-  res.status(204).end();
+  Person.findByIdAndRemove(id).then(result => {
+    res.status(204).end();
+  });
 });
 
 const generateId = () => Math.floor(Math.random() * 1000000000 + 1);
