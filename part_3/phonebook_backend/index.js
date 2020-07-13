@@ -21,12 +21,14 @@ app.get('/api/persons', (req, res) => {
 });
 
 app.get('/info', (req, res) => {
-  const length = persons.length;
-  const date = new Date();
+  Person.find({}).then(persons => {
+    const length = persons.length;
+    const date = new Date();
 
-  res.write(`<p>Phonebook has info for ${length} people.</p>`);
-  res.write(`<p>${date}</p>`);
-  res.end();
+    res.write(`<p>Phonebook has info for ${length} people.</p>`);
+    res.write(`<p>${date}</p>`);
+    res.end();
+  });
 });
 
 app.get('/api/persons/:id', (req, res, next) => {
