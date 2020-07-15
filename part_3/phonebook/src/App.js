@@ -69,10 +69,9 @@ const App = () => {
             }, 5000);
           })
           .catch(error => {
+            console.log(error.response.data);
             setNotificationColor('red');
-            setNotificationMessage(
-              `Information of '${personWithSameName.name}' has been removed from server`,
-            );
+            setNotificationMessage(String(error.response.data.error));
             setTimeout(() => {
               setNotificationMessage(null);
             }, 5000);
@@ -82,14 +81,24 @@ const App = () => {
           });
       }
     } else
-      personService.create(personObject).then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson));
-        setNotificationColor('green');
-        setNotificationMessage('Added ' + personObject.name);
-        setTimeout(() => {
-          setNotificationMessage(null);
-        }, 5000);
-      });
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson));
+          setNotificationColor('green');
+          setNotificationMessage('Added ' + personObject.name);
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+        })
+        .catch(error => {
+          console.log(error.response.data);
+          setNotificationColor('red');
+          setNotificationMessage(String(error.response.data.error));
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 5000);
+        });
   };
 
   const handleNameChange = event => {
