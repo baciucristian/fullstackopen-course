@@ -22,7 +22,7 @@ const App = () => {
 
   const handleDeleteClick = (name, id) => {
     if (window.confirm(`Delete ${name} ?`)) {
-      personService.deleteData(id).then(data => {
+      personService.deleteData(id).then(() => {
         setPersons(persons.filter(person => person.id !== id));
         setNotificationColor('green');
         setNotificationMessage(`${name} was deleted`);
@@ -63,7 +63,7 @@ const App = () => {
               ),
             );
             setNotificationColor('green');
-            setNotificationMessage('Updated ' + personObject.name);
+            setNotificationMessage(`Updated ${personObject.name}`);
             setTimeout(() => {
               setNotificationMessage(null);
             }, 5000);
@@ -86,7 +86,7 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson));
           setNotificationColor('green');
-          setNotificationMessage('Added ' + personObject.name);
+          setNotificationMessage(`Added ${personObject.name}`);
           setTimeout(() => {
             setNotificationMessage(null);
           }, 5000);
@@ -110,8 +110,8 @@ const App = () => {
   };
 
   const handleFilterChange = event => {
-    const searchedWord = event.target.value.trim().toLowerCase();
-    setSearchedWord(searchedWord);
+    const inputWord = event.target.value.trim().toLowerCase();
+    setSearchedWord(inputWord);
   };
 
   return (
