@@ -1,0 +1,9 @@
+POST http://localhost:3002/api/blogs
+content-type: application/json
+
+{
+    "title": "Blog 01",
+    "author": "Cristian Baciu",
+    "url": "https://www.jw.org/ro/",
+    "likes": 23
+}
