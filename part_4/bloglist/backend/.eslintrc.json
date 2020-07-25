@@ -20,5 +20,8 @@
     "prefer-destructuring": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off"
+  },
+  "globals": {
+    "_": true
   }
 }
