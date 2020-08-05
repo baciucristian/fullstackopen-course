@@ -3,7 +3,6 @@ const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
 const helper = require('../utils/test_helper');
-const blog = require('../models/blog');
 
 const api = supertest(app);
 
@@ -69,6 +68,19 @@ test('if likes property is missing, it will default to the value 0', async () =>
   const blogsAtEnd = await helper.blogsInDb();
   const lastItem = blogsAtEnd[blogsAtEnd.length - 1];
   expect(lastItem.likes).toBe(0);
+});
+
+test('if title and url properties are missing, the backend responds with status code 400', async () => {
+  const newBlog = {
+    author: 'Everyday Astronaut',
+    likes: '235',
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/);
 });
 
 afterAll(() => {

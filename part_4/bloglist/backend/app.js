@@ -1,4 +1,5 @@
 const express = require('express');
+require('express-async-errors');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
@@ -8,8 +9,6 @@ const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 
 const app = express();
-
-require('express-async-errors');
 
 logger.info('connecting to', config.MONGODB_URI);
 
