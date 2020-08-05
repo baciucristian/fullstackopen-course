@@ -3,6 +3,7 @@ const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
 const helper = require('../utils/test_helper');
+const blog = require('../models/blog');
 
 const api = supertest(app);
 
@@ -50,6 +51,24 @@ test('a valid blog can be added,', async () => {
 
   const contents = blogsAtEnd.map(blog => blog.title);
   expect(contents).toContain('The future of spaceflight');
+});
+
+test('if likes property is missing, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'Is SpaceX’s raptor engine the king of rocket engines?',
+    author: 'Everyday Astronaut',
+    url: 'https://everydayastronaut.com/raptor-engine/',
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  const lastItem = blogsAtEnd[blogsAtEnd.length - 1];
+  expect(lastItem.likes).toBe(0);
 });
 
 afterAll(() => {
