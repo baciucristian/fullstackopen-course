@@ -19,7 +19,8 @@
     "class-methods-use-this": "off",
     "prefer-destructuring": "off",
     "no-param-reassign": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "node/no-unpublished-require": "off"
   },
   "globals": {
     "_": true

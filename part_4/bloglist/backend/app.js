@@ -9,6 +9,8 @@ const logger = require('./utils/logger');
 
 const app = express();
 
+require('express-async-errors');
+
 logger.info('connecting to', config.MONGODB_URI);
 
 mongoose
