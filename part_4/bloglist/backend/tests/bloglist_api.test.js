@@ -3,7 +3,6 @@ const supertest = require('supertest');
 const app = require('../app');
 const Blog = require('../models/blog');
 const helper = require('../utils/test_helper');
-const blog = require('../models/blog');
 
 const api = supertest(app);
 
@@ -100,6 +99,26 @@ describe('deletion of a blog', () => {
 
     const titles = blogsAtEnd.map(b => b.title);
     expect(titles).not.toContain(blogToDelete.title);
+  });
+});
+
+describe('update of a blog', () => {
+  test('update likes and succeeds with status code 200 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+    const newLikes = {
+      likes: 50,
+    };
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(newLikes).expect(200);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    const updatedBlog = blogsAtEnd[0];
+
+    expect(updatedBlog.title).toBe(blogToUpdate.title);
+    expect(updatedBlog.author).toBe(blogToUpdate.author);
+    expect(updatedBlog.url).toBe(blogToUpdate.url);
+    expect(updatedBlog.likes).toBe(50);
   });
 });
 
