@@ -155,6 +155,33 @@ describe('when there is initially one user in db', () => {
     const usernames = usersAtEnd.map(u => u.username);
     expect(usernames).toContain(newUser.username);
   });
+
+  test('if username or password are missing, the backend responds with status code 400', async () => {
+    const newUser = {
+      name: 'Cristian Baciu',
+      password: 'portugal',
+    };
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+  });
+
+  test('if username or password has length less than 3 characters, the backend responds with status code 400', async () => {
+    const newUser = {
+      username: 'Resiv',
+      name: 'Marius Cojocaru',
+      password: 'po',
+    };
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+  });
 });
 
 afterAll(() => {
