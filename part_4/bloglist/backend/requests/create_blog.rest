@@ -2,8 +2,9 @@ POST http://localhost:3002/api/blogs
 content-type: application/json
 
 {
-    "title": "Future of my house",
-    "author": "Cris",
+    "title": "Future os SpaceX",
+    "author": "Daniel Craig",
     "url": "https://www.wikipedia.org/en/",
-    "likes": 1012
+    "likes": 987,
+    "userId": "5f3eb1dd0981091b50fb2905"
 }
