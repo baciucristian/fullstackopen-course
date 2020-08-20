@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
+// for Deprecation Warning
+mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 const blogSchema = mongoose.Schema({
   title: {
