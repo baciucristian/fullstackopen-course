@@ -1,10 +1,10 @@
 POST http://localhost:3002/api/blogs
-content-type: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkJhY2l1TmVzcyIsImlkIjoiNWY0MjY1NzJmNTFhOTkwMjcwNDdmODQ2IiwiaWF0IjoxNTk4MTg3NjAwfQ.t9jwO-v1JDnyiYMxKiy4SdoMNH04K9CGF2QrIARK8_s
 
 {
-    "title": "Future os SpaceX",
-    "author": "Daniel Craig",
+    "title": "What is Falcon 9?",
+    "author": "Elon Musk",
     "url": "https://www.wikipedia.org/en/",
-    "likes": 987,
-    "userId": "5f3eb1dd0981091b50fb2905"
+    "likes": 872
 }
