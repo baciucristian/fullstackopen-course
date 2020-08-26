@@ -8,12 +8,42 @@ const User = require('../models/user');
 
 const api = supertest(app);
 
+let token;
+let rootUserID;
+
+beforeAll(async () => {
+  await User.deleteMany({});
+
+  const passwordHash = await bcrypt.hash('secret', 10);
+  const user = new User({username: 'root', passwordHash});
+  rootUserID = user._id;
+  await user.save();
+
+  // get token
+  const response = await api.post('/api/login').send({
+    username: 'root',
+    password: 'secret',
+  });
+
+  token = response.body.token;
+});
+
 beforeEach(async () => {
   await Blog.deleteMany({});
+  const user = await User.findById(rootUserID);
 
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog));
+  const blogObjects = helper.initialBlogs.map(
+    blog =>
+      new Blog({
+        title: blog.title,
+        author: blog.author,
+        url: blog.url,
+        likes: blog.likes,
+        user: user._id,
+      }),
+  );
   const promiseArray = blogObjects.map(blog => blog.save());
-  await Promise.all(promiseArray);
+  await Promise.all(promiseArray, user.save());
 });
 
 describe('when there is initially some blogs saved', () => {
@@ -46,6 +76,7 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
@@ -66,6 +97,7 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/);
@@ -83,8 +115,24 @@ describe('addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(400)
+      .expect('Content-Type', /application\/json/);
+  });
+
+  test('if token is missing, the backend responds with status code 401,', async () => {
+    const newBlog = {
+      title: 'The future of SpaceX',
+      author: 'Elon Musk',
+      url: 'https://www.spacex.com/news',
+      likes: 32,
+    };
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
       .expect('Content-Type', /application\/json/);
   });
 });
@@ -94,7 +142,10 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await helper.blogsInDb();
     const blogToDelete = blogsAtStart[0];
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204);
 
     const blogsAtEnd = await helper.blogsInDb();
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1);
@@ -125,15 +176,6 @@ describe('update of a blog', () => {
 });
 
 describe('when there is initially one user in db', () => {
-  beforeEach(async () => {
-    await User.deleteMany({});
-
-    const passwordHash = await bcrypt.hash('secret', 10);
-    const user = new User({username: 'root', passwordHash});
-
-    await user.save();
-  });
-
   test('creation succeeds with a fresh username', async () => {
     const usersAtStart = await helper.usersInDb();
 
