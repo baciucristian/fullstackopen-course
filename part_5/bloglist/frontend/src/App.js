@@ -92,6 +92,19 @@ const App = () => {
     }
   };
 
+  const addLikeOf = async (id) => {
+    try {
+      const blog = blogs.find((n) => n.id === id);
+      const changedBlog = { likes: blog.likes + 1 };
+      let returnedBlog = await blogService.update(id, changedBlog);
+      returnedBlog = { ...returnedBlog, user: blog.user };
+
+      setBlogs(blogs.map((n) => (n.id !== id ? n : returnedBlog)));
+    } catch (exception) {
+      console.error(exception);
+    }
+  };
+
   const loginForm = () => (
     <LoginForm
       username={username}
@@ -124,7 +137,11 @@ const App = () => {
           </p>
           {blogForm()}
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              addLike={() => addLikeOf(blog.id)}
+            />
           ))}
         </div>
       )}
