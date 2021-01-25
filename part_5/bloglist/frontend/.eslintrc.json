@@ -31,7 +31,7 @@
     "prefer-destructuring": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-alert": 0,
     "react/prop-types": 0
   }
