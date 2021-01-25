@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
-// import Togglable from './components/Togglable';
+import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
 
@@ -14,6 +14,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [notificationMessage, setNotificationMessage] = useState(null);
   const [notificationColor, setNotificationColor] = useState('');
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs));
@@ -70,6 +71,7 @@ const App = () => {
 
   const handleCreate = async (title, author, url) => {
     try {
+      blogFormRef.current.toggleVisibility();
       blogService.setToken(user.token);
       const returnedBlog = await blogService.create({ title, author, url });
 
@@ -101,9 +103,9 @@ const App = () => {
   );
 
   const blogForm = () => (
-    <div>
+    <Togglable buttonLabel="new blog" ref={blogFormRef}>
       <BlogForm createBlog={handleCreate} />
-    </div>
+    </Togglable>
   );
 
   return (
