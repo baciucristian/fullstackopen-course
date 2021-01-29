@@ -9,6 +9,7 @@ import loginService from './services/login';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
+  const [blogsToRender, setBlogsToRender] = useState([]);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
@@ -27,6 +28,11 @@ const App = () => {
       setUser(userFromLocalStorage);
     }
   }, []);
+
+  useEffect(() => {
+    const sortedBlogsByLikes = [...blogs].sort((a, b) => a.likes - b.likes);
+    setBlogsToRender(sortedBlogsByLikes);
+  }, [blogs]);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -136,7 +142,7 @@ const App = () => {
             </button>
           </p>
           {blogForm()}
-          {blogs.map((blog) => (
+          {blogsToRender.map((blog) => (
             <Blog
               key={blog.id}
               blog={blog}
