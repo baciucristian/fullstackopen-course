@@ -111,6 +111,22 @@ const App = () => {
     }
   };
 
+  const deleteBlogOf = async (id) => {
+    try {
+      blogService.setToken(user.token);
+      const blog = blogs.find((n) => n.id === id);
+      const result = window.confirm(
+        `Remove blog ${blog.title} by ${blog.author}?`
+      );
+      if (result) {
+        await blogService.deleteBlog(id);
+        setBlogs(blogs.filter((n) => n.id !== id));
+      }
+    } catch (exception) {
+      console.error(exception);
+    }
+  };
+
   const loginForm = () => (
     <LoginForm
       username={username}
@@ -147,6 +163,7 @@ const App = () => {
               key={blog.id}
               blog={blog}
               addLike={() => addLikeOf(blog.id)}
+              deleteBlog={() => deleteBlogOf(blog.id)}
             />
           ))}
         </div>
