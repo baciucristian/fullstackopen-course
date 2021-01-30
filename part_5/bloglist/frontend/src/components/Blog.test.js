@@ -1,30 +1,44 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
 
-test('at start render just the blogs title and author ', () => {
-  const blog = {
-    id: 965734074,
-    title: 'Why to learn programming?',
-    author: 'Cristian Baciu',
-    url: 'cristianbaciu.com',
-    likes: 2,
-    user: {
-      name: 'BaciuNess',
-    },
-  };
+describe('<Blog />', () => {
+  let component;
 
-  const addLike = jest.fn();
-  const deleteBlog = jest.fn();
+  beforeEach(() => {
+    const blog = {
+      id: 965734074,
+      title: 'Why to learn programming?',
+      author: 'Cristian Baciu',
+      url: 'cristianbaciu.com',
+      likes: 2,
+      user: {
+        name: 'BaciuNess',
+      },
+    };
 
-  const component = render(
-    <Blog blog={blog} addlike={addLike} deleteBlog={deleteBlog} />
-  );
+    const addLike = jest.fn();
+    const deleteBlog = jest.fn();
 
-  const div = component.container.querySelector('.togglableContent');
+    component = render(
+      <Blog blog={blog} addlike={addLike} deleteBlog={deleteBlog} />
+    );
+  });
 
-  expect(component.container).toHaveTextContent('Why to learn programming?');
-  expect(component.container).toHaveTextContent('Cristian Baciu');
-  expect(div).toHaveStyle('display: none');
+  test('at start render just the blog title and author', () => {
+    const div = component.container.querySelector('.togglableContent');
+
+    expect(component.container).toHaveTextContent('Why to learn programming?');
+    expect(component.container).toHaveTextContent('Cristian Baciu');
+    expect(div).toHaveStyle('display: none');
+  });
+
+  test('after clicking the button, children are displayed', () => {
+    const button = component.getByText('view');
+    fireEvent.click(button);
+
+    const div = component.container.querySelector('.togglableContent');
+    expect(div).not.toHaveStyle('display: none');
+  });
 });
