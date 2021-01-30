@@ -1,7 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "jest/globals": true
   },
   "extends": ["airbnb", "react-app", "prettier", "prettier/react"],
   "globals": {
@@ -15,6 +16,7 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "plugins": ["react", "jest"],
   "rules": {
     "no-unused-vars": "warn",
     "no-console": "off",
@@ -28,5 +30,10 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-alert": 0,
     "react/prop-types": 0
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
