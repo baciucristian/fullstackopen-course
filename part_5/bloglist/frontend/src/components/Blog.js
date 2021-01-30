@@ -26,7 +26,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
           view
         </button>
       </p>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className="togglableContent">
         {blog.url} <br />
         likes {`${blog.likes} `}
         <button type="button" onClick={addLike}>
