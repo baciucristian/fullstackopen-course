@@ -5,6 +5,7 @@ import Blog from './Blog';
 
 describe('<Blog />', () => {
   let component;
+  let addLike;
 
   beforeEach(() => {
     const blog = {
@@ -18,11 +19,11 @@ describe('<Blog />', () => {
       },
     };
 
-    const addLike = jest.fn();
+    addLike = jest.fn();
     const deleteBlog = jest.fn();
 
     component = render(
-      <Blog blog={blog} addlike={addLike} deleteBlog={deleteBlog} />
+      <Blog blog={blog} addLike={addLike} deleteBlog={deleteBlog} />
     );
   });
 
@@ -40,5 +41,12 @@ describe('<Blog />', () => {
 
     const div = component.container.querySelector('.togglableContent');
     expect(div).not.toHaveStyle('display: none');
+  });
+
+  test('when like button is clicked twice, the event handler is called twice.', () => {
+    const button = component.getByText('like');
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(addLike.mock.calls).toHaveLength(2);
   });
 });
