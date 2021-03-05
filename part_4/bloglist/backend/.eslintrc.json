@@ -20,7 +20,8 @@
     "prefer-destructuring": "off",
     "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "node/no-unpublished-require": "off"
+    "node/no-unpublished-require": "off",
+    "global-require": "off"
   },
   "globals": {
     "_": true
