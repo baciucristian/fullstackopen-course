@@ -28,7 +28,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
       </p>
       <div style={showWhenVisible} className="togglableContent">
         {blog.url} <br />
-        likes {`${blog.likes} `}
+        likes <span className="likes">{`${blog.likes} `}</span>
         <button type="button" onClick={addLike}>
           like
         </button>

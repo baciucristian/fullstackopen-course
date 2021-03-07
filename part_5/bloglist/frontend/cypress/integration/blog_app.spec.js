@@ -93,6 +93,12 @@ describe('Blog app', function () {
           author: 'author2',
           url: 'blog2.com',
         });
+
+        cy.createBlog({
+          title: 'third blog',
+          author: 'author3',
+          url: 'blog3.com',
+        });
       });
 
       it('it can be liked', function () {
@@ -105,6 +111,38 @@ describe('Blog app', function () {
         cy.contains('second blog').contains('view').click();
         cy.contains('second blog').parent().contains('delete').click();
         cy.get('body').should('not.contain', 'second blog');
+      });
+
+      it.only('are ordered by likes', function () {
+        // add random number of likes
+        let likesArray = [];
+        cy.get('button:contains("view")')
+          .then((buttons) => {
+            cy.wrap(buttons).each((button) => {
+              button.click();
+              const randomNumber = Math.floor(Math.random() * 10);
+              for (let i = 0; i < randomNumber; i++)
+                cy.wrap(button).parent().parent().contains('like').click();
+            });
+          })
+          .then((res) => {
+            cy.get('.likes').then((blogsLikes) => {
+              cy.wrap(blogsLikes).each((blogLikes) => {
+                likesArray.push(blogLikes.text());
+              });
+            });
+          });
+
+        // check if array is sorted
+        let isSorted = true;
+        for (let j = 0; j < likesArray.length - 1; j++) {
+          if (likesArray[j] > likesArray[j + 1]) {
+            isSorted = false;
+            break;
+          }
+        }
+        console.log(isSorted);
+        expect(isSorted).to.be.true;
       });
     });
   });

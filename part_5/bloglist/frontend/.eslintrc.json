@@ -30,7 +30,8 @@
     "no-underscore-dangle": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "no-alert": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "no-plusplus": "off"
   },
   "settings": {
     "react": {
