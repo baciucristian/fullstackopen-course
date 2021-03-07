@@ -15,4 +15,5 @@ Modern web development with JS, Node.js, React, Redux, MongoDB, REST, GraphQL & 
 | 2         | 20/20      |
 | 3         | 22/22      |
 | 4         | 22/22      |
-| **Total** | **84/198** |
+| 5         | 22/22      |
+| **Total** | **106/198** |
