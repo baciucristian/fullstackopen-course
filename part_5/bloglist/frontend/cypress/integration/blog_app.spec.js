@@ -7,6 +7,12 @@ describe('Blog app', function () {
       password: 'aloha',
     };
     cy.request('POST', 'http://localhost:3001/api/users/', user);
+    const user2 = {
+      name: 'Timoteo Pedreiro',
+      username: 'ounicoctt',
+      password: 'portugal',
+    };
+    cy.request('POST', 'http://localhost:3001/api/users/', user2);
     cy.visit('http://localhost:3000');
   });
 
@@ -76,12 +82,29 @@ describe('Blog app', function () {
           author: 'author1',
           url: 'blog1.com',
         });
+
+        cy.login({
+          username: 'ounicoctt',
+          password: 'portugal',
+        });
+
+        cy.createBlog({
+          title: 'second blog',
+          author: 'author2',
+          url: 'blog2.com',
+        });
       });
 
       it('it can be liked', function () {
         cy.contains('first blog').contains('view').click();
         cy.get('.togglableContent').contains('like').click();
         cy.get('.togglableContent').contains('likes 1');
+      });
+
+      it('it can be deleted by the user who created', function () {
+        cy.contains('second blog').contains('view').click();
+        cy.contains('second blog').parent().contains('delete').click();
+        cy.get('body').should('not.contain', 'second blog');
       });
     });
   });
