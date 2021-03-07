@@ -37,11 +37,12 @@ describe('Blog app', function () {
     });
   });
 
-  describe.only('When logged in', function () {
+  describe('When logged in', function () {
     beforeEach(function () {
-      cy.get('#username').type('baciuness');
-      cy.get('#password').type('aloha');
-      cy.get('#login-button').click();
+      cy.login({
+        username: 'baciuness',
+        password: 'aloha',
+      });
     });
 
     it('A blog can be created', function () {
@@ -54,6 +55,34 @@ describe('Blog app', function () {
       cy.get('.notification').contains('Blog created successfully!');
       cy.contains('My Resume');
       cy.contains('Cristian Baciu');
+    });
+
+    it('A blog can be created', function () {
+      cy.contains('new blog').click();
+      cy.get('#title').type('My Resume');
+      cy.get('#author').type('Cristian Baciu');
+      cy.get('#url').type('https://baciucristian.github.io/resume/');
+      cy.get('button').contains('Create').click();
+
+      cy.get('.notification').contains('Blog created successfully!');
+      cy.contains('My Resume');
+      cy.contains('Cristian Baciu');
+    });
+
+    describe.only('and a blog exists', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'first blog',
+          author: 'author1',
+          url: 'blog1.com',
+        });
+      });
+
+      it('it can be liked', function () {
+        cy.contains('first blog').contains('view').click();
+        cy.get('.togglableContent').contains('like').click();
+        cy.get('.togglableContent').contains('likes 1');
+      });
     });
   });
 });
