@@ -33,9 +33,24 @@ const reducer = (state = initialState, action) => {
       return state.map((anecdote) =>
         anecdote.id !== id ? anecdote : changedAnecdote
       );
+    case 'CREATE_ANECDOTE':
+      return state.concat(action.data);
     default:
       return state;
   }
+};
+
+const generateId = () => Number((Math.random() * 1000000).toFixed(0));
+
+export const createAnecdote = (content) => {
+  return {
+    type: 'CREATE_ANECDOTE',
+    data: {
+      id: generateId(),
+      content,
+      votes: 0,
+    },
+  };
 };
 
 export default reducer;
