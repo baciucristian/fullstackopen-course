@@ -53,4 +53,11 @@ export const createAnecdote = (content) => {
   };
 };
 
+export const addVoteOf = (id) => {
+  return {
+    type: 'ADD_VOTE',
+    data: { id },
+  };
+};
+
 export default reducer;
