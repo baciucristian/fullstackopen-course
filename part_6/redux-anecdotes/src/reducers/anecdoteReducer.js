@@ -1,4 +1,4 @@
-const anecdotesAtStart = [
+let anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
   'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
@@ -23,7 +23,19 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
-  return state
+  switch(action.type) {
+    case 'NEW_ANECDOTE':
+      return [...state, action.payload]
+    default:
+      return state
+  }
+}
+
+export const createAnecdote = (content) => {
+  return {
+    type: 'NEW_ANECDOTE',
+    payload: asObject(content)
+  }
 }
 
 export default reducer
