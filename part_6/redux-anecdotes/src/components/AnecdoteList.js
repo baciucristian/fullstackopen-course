@@ -1,9 +1,10 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { addVote } from '../reducers/anecdoteReducer'
 
 const AnecdoteForm = () => {
 	const anecdotes = useSelector(state => {
-    if ( state.filter === 'ALL' || state.filter === '') {
+		console.log(state)
+
+    if ( !state.filter) {
       return state.anecdotes
     }
     return state.anecdotes.filter(anecdote => {
@@ -15,10 +16,10 @@ const AnecdoteForm = () => {
 	const dispatch = useDispatch();
 
   const vote = (id) => {
-    dispatch(addVote(id))
+    dispatch({ type: 'anecdotes/addVote', payload: id })
   }
 
-  const sortedAnecdotes = anecdotes.sort((a, b) => b.votes - a.votes)
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
 
   return (
 		<>

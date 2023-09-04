@@ -37,6 +37,9 @@ const anecdoteSlice = createSlice({
         ...anecdoteToChange,
         votes: anecdoteToChange.votes + 1
       }
+
+      console.log(JSON.parse(JSON.stringify(state)))
+
       return state.map(anecdote => 
         anecdote.id === id ? updatedAnecdote : anecdote
       )
