@@ -4,7 +4,7 @@ const AnecdoteForm = () => {
 	const anecdotes = useSelector(state => {
 		console.log(state)
 
-    if ( !state.filter) {
+    if (!state.filter) {
       return state.anecdotes
     }
     return state.anecdotes.filter(anecdote => {
@@ -17,7 +17,10 @@ const AnecdoteForm = () => {
 
   const vote = (id, content) => {
     dispatch({ type: 'anecdotes/addVote', payload: id })
-    dispatch({ type: 'notification/setNotification', payload: content })
+    dispatch({ type: 'notification/setNotification', payload: `you voted '${content}'` })
+		setTimeout(() => {
+			dispatch({ type: 'notification/clearNotification' })
+		}, 5 * 1000);
   }
 
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
