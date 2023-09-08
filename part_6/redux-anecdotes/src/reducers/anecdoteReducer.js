@@ -14,8 +14,6 @@ const anecdoteSlice = createSlice({
         votes: anecdoteToChange.votes + 1
       }
 
-      console.log(JSON.parse(JSON.stringify(state)))
-
       return state.map(anecdote => 
         anecdote.id === id ? updatedAnecdote : anecdote
       )
@@ -42,6 +40,20 @@ export const createAnecdote = content => {
   return async dispatch => {
     const newAnecdote = await anecdoteService.createNew(content)
     dispatch(addAnecdote(newAnecdote))
+  }
+}
+
+export const updateVote = id => {
+  return async (dispatch, getState) => {
+    const state = getState();
+    const anecdoteToChange = state.anecdotes.find(el => el.id === id)
+    const updatedAnecdote = {
+      ...anecdoteToChange,
+      votes: anecdoteToChange.votes + 1
+    }
+
+    await anecdoteService.updateAnecdote(updatedAnecdote)
+    dispatch(addVote(id))
   }
 }
 
