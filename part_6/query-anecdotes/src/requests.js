@@ -8,3 +8,11 @@ export const createAnecdote = async (newAnecdote) => {
 	const response = await axios.post(baseUrl, newAnecdote);
 	return response.data;
 };
+
+export const updateAnecdote = async (changedAnecdote) => {
+	const response = await axios.put(
+		baseUrl + `/${changedAnecdote.id}`,
+		changedAnecdote,
+	);
+	return response.data;
+};
