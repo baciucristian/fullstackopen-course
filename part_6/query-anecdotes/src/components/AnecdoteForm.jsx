@@ -13,6 +13,11 @@ const AnecdoteForm = () => {
 			queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote));
 			console.log('anecdote created successfully', newAnecdote);
 		},
+		onError: (res) => {
+			console.log('anecdote creation error');
+			const errorMessage = res.response.data.error;
+			dispatch({ type: 'SET', notification: errorMessage });
+		},
 	});
 
 	const onCreate = (event) => {
