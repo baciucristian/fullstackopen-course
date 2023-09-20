@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNotificationDispatch } from './NotificationContext';
 
 import AnecdoteForm from './components/AnecdoteForm';
 import Notification from './components/Notification';
@@ -6,6 +7,7 @@ import { getAnecdotes, updateAnecdote } from './requests';
 
 const App = () => {
 	const queryClient = useQueryClient();
+	const dispatch = useNotificationDispatch();
 
 	const addVoteMutation = useMutation({
 		mutationFn: updateAnecdote,
@@ -23,6 +25,11 @@ const App = () => {
 	const handleVote = (anecdote) => {
 		const changedAnecdote = { ...anecdote, votes: anecdote.votes + 1 };
 		addVoteMutation.mutate(changedAnecdote);
+
+		dispatch({ type: 'SET', notification: anecdote.content });
+		setTimeout(() => {
+			dispatch({ type: 'CLEAR' });
+		}, 5 * 1000);
 	};
 
 	const result = useQuery({
@@ -32,7 +39,7 @@ const App = () => {
 		refetchOnWindowFocus: false,
 	});
 
-	console.log('retrieved data', JSON.parse(JSON.stringify(result)));
+	// console.log('retrieved data', JSON.parse(JSON.stringify(result)));
 
 	if (result.isLoading) {
 		return <div>loading data...</div>;
