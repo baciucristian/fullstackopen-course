@@ -1,4 +1,4 @@
-# [Full Stack Open 2020](https://fullstackopen.com/en/)
+# [Full Stack Open](https://fullstackopen.com/en/)
 
 This is my repository, featuring my progress, work, and solutions for the Fullstack Developer Course 2020 @ University of Helsinki
 
@@ -16,4 +16,5 @@ Modern web development with JS, Node.js, React, Redux, MongoDB, REST, GraphQL & 
 | 3         | 22/22      |
 | 4         | 22/22      |
 | 5         | 22/22      |
-| **Total** | **106/198** |
+| 6         | 24/24      |
+| **Total** | **130/198 (66%)** |
