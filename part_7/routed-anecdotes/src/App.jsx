@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { Routes, Route, Link } from 'react-router-dom';
+
 let Menu = () => {
 	const padding = {
 		paddingRight: 5,
 	};
 	return (
 		<div>
-			<a href="#" style={padding}>
+			<Link style={padding} to={'/'}>
 				anecdotes
-			</a>
-			<a href="#" style={padding}>
+			</Link>
+			<Link style={padding} to={'/create'}>
 				create new
-			</a>
-			<a href="#" style={padding}>
+			</Link>
+			<Link style={padding} to={'/about'}>
 				about
-			</a>
+			</Link>
 		</div>
 	);
 };
@@ -163,9 +165,11 @@ const App = () => {
 		<div>
 			<h1>Software anecdotes</h1>
 			<Menu />
-			<AnecdoteList anecdotes={anecdotes} />
-			<About />
-			<CreateNew addNew={addNew} />
+			<Routes>
+				<Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+				<Route path="/create" element={<CreateNew addNew={addNew} />} />
+				<Route path="/about" element={<About />} />
+			</Routes>
 			<Footer />
 		</div>
 	);
