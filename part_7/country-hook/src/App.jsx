@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import countryService from './services/countryService';
 
 const useField = (type) => {
 	const [value, setValue] = useState('');
@@ -18,7 +18,16 @@ const useField = (type) => {
 const useCountry = (name) => {
 	const [country, setCountry] = useState(null);
 
-	useEffect(() => {});
+	useEffect(() => {
+		if (!name) {
+			setCountry(null);
+			return;
+		}
+
+		countryService.getByName(name).then((res) => {
+			setCountry(res);
+		});
+	}, [name]);
 
 	return country;
 };
