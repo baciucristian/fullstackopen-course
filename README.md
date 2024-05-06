@@ -1,10 +1,12 @@
 # [Full Stack Open](https://fullstackopen.com/en/)
 
-This is my repository, featuring my progress, work, and solutions for the Fullstack Developer Course 2024 @ University of Helsinki
+<img src="blocks.svg" align="right" width="100">
 
-Modern web development with JS, Node.js, React, Redux, MongoDB, REST, GraphQL, Typescript and much more.
+:open_book: This is my repository, featuring my progress, work, and solutions for the Fullstack Developer Course 2024 @ University of Helsinki
 
-**Important:** If you clone the project, run the command `pnpm install` before starting the application with `pnpm dev`.
+> This course serves as an introduction to modern web application development with JavaScript. The main focus is on building single page applications with ReactJS that use REST APIs built with Node.js.
+
+:rocket: Technologies covered in this course include: JavaScript (JS), TypeScript, Node.js, Express, React, Redux, React Native, MongoDB, PostgreSQL, REST, GraphQL, Vitest (Jest), Cypress, and much more.
 
 ## Exercises done :white_check_mark:
 
