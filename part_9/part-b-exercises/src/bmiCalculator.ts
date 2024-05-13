@@ -1,3 +1,10 @@
+import { isNotNumber } from './utils/isNotNumber';
+
+interface BmiParams {
+	heightArg: number;
+	weightArg: number;
+}
+
 type BmiValues =
 	| 'Underweight (Severe thinness)'
 	| 'Underweight (Moderate thinness)'
@@ -7,6 +14,20 @@ type BmiValues =
 	| 'Obese (Class I)'
 	| 'Obese (Class II)'
 	| 'Obese (Class III)';
+
+const parseArguments = (args: string[]): BmiParams => {
+	if (args.length < 4) throw new Error('Not enough arguments');
+	if (args.length > 4) throw new Error('Too many arguments');
+
+	if (!isNotNumber(args[2]) && !isNotNumber(args[3])) {
+		return {
+			heightArg: Number(args[2]),
+			weightArg: Number(args[3]),
+		};
+	} else {
+		throw new Error('Provided values were not numbers!');
+	}
+};
 
 function calculateBmi(height: number, weight: number): BmiValues {
 	const heightInMeters: number = height / 100;
@@ -32,4 +53,14 @@ function calculateBmi(height: number, weight: number): BmiValues {
 	}
 }
 
-console.log(calculateBmi(180, 74));
+try {
+	const { heightArg, weightArg } = parseArguments(process.argv);
+	const result: BmiValues = calculateBmi(heightArg, weightArg);
+	console.log(`height: ${heightArg}, weight: ${weightArg}, BMI: ${result}`);
+} catch (error: unknown) {
+	let errorMessage = 'Something bad happened.';
+	if (error instanceof Error) {
+		errorMessage += ' Error: ' + error.message;
+	}
+	console.log(errorMessage);
+}
