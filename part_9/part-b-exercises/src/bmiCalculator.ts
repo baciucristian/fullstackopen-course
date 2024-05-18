@@ -48,7 +48,7 @@ function calculateBmi(height: number, weight: number): BmiValues {
 		return 'Obese (Class I)';
 	} else if (bmi >= 35 && bmi < 40) {
 		return 'Obese (Class II)';
-	} else if (bmi >= 40) {
+	} else {
 		return 'Obese (Class III)';
 	}
 }
@@ -64,3 +64,5 @@ try {
 	}
 	console.log(errorMessage);
 }
+
+export { BmiValues, parseArguments, calculateBmi };
