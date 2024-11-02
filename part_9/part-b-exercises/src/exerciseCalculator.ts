@@ -99,3 +99,5 @@ try {
 	}
 	console.log(errorMessage);
 }
+
+export { ExercisesParams, ExercisesResult, calculateExercises };
