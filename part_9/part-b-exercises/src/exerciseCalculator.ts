@@ -36,10 +36,7 @@ const parseArguments = (args: string[]): ExercisesParams => {
 	};
 };
 
-function calculateExercises(
-	dailyExerciseHours: number[],
-	target: number
-): ExercisesResult {
+function calculateExercises(dailyExerciseHours: number[], target: number): ExercisesResult {
 	const periodLength: number = dailyExerciseHours.length;
 
 	let trainingDays: ExercisesResult['trainingDays'] = 0;
@@ -78,8 +75,7 @@ function calculateExercises(
 			break;
 	}
 
-	const average: ExercisesResult['average'] =
-		dailyExerciseHours.reduce((a, b) => a + b, 0) / periodLength;
+	const average: ExercisesResult['average'] = dailyExerciseHours.reduce((a, b) => a + b, 0) / periodLength;
 
 	return {
 		periodLength,
@@ -94,10 +90,7 @@ function calculateExercises(
 
 try {
 	const { dailyExerciseHours, target } = parseArguments(process.argv);
-	const result: ExercisesResult = calculateExercises(
-		dailyExerciseHours,
-		target
-	);
+	const result: ExercisesResult = calculateExercises(dailyExerciseHours, target);
 	console.log(result);
 } catch (error: unknown) {
 	let errorMessage = 'Something bad happened.';

@@ -34,6 +34,7 @@ app.get('/bmi', (req, res) => {
 
 		res.send(JSON.stringify(responseResult));
 	} catch (error: unknown) {
+		console.log(error);
 		res.status(400).send(JSON.stringify({ error: 'malformatted parameters' }));
 	}
 });
