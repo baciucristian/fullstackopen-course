@@ -1,3 +1,18 @@
+export enum Gender {
+	Male = 'male',
+	Female = 'female',
+	Other = 'other',
+}
+
+export enum Occupation {
+	Cop = 'Cop',
+	NewYorkCityCop = 'New york city cop',
+	ForensicPathologist = 'Forensic Pathologist',
+	DigitalEvangelist = 'Digital evangelist',
+	Technician = 'Technician',
+	Other = 'Other',
+}
+
 export interface DiagnoseEntry {
 	code: string;
 	name: string;
@@ -8,8 +23,8 @@ export interface PatientEntry {
 	name: string;
 	dateOfBirth: string;
 	ssn: string;
-	gender: 'male' | 'female' | 'other';
-	occupation: string;
+	gender: Gender;
+	occupation: Occupation;
 }
 
 export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
