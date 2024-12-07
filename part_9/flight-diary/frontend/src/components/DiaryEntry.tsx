@@ -9,7 +9,11 @@ const DiaryEntry = ({ entry }: DiaryEntryProps): JSX.Element => {
 			<br />
 			<span>weather: {entry.weather}</span>
 			<br />
-			<span>comment: {entry.comment}</span>
+			{entry.comment && (
+				<span>
+					<span>comment: {entry.comment}</span>
+				</span>
+			)}
 		</p>
 	);
 };

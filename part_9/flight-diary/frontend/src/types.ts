@@ -13,8 +13,8 @@ export enum Visibility {
 export interface DiaryEntry {
 	weather: Weather | '';
 	visibility: Visibility | '';
-	date: string | '';
-	comment: string | '';
+	date: string;
+	comment: string;
 	id: number;
 }
 
@@ -26,4 +26,9 @@ export interface DiaryEntriesProps {
 
 export interface DiaryEntryProps {
 	entry: DiaryEntry;
+}
+
+export interface NotificationProps {
+	message: string | null;
+	color: 'red' | 'green' | null;
 }
