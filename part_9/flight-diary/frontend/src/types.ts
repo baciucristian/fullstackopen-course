@@ -11,12 +11,14 @@ export enum Visibility {
 }
 
 export interface DiaryEntry {
-	weather: Weather;
-	visibility: Visibility;
-	date: string;
-	comment: string;
+	weather: Weather | '';
+	visibility: Visibility | '';
+	date: string | '';
+	comment: string | '';
 	id: number;
 }
+
+export type NewDiaryEntry = Omit<DiaryEntry, 'id'>;
 
 export interface DiaryEntriesProps {
 	entries: DiaryEntry[];

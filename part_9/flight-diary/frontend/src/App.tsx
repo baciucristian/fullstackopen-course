@@ -1,21 +1,13 @@
-import { useEffect, useState } from 'react';
+import DiaryAddEntry from './components/DiaryAddEntry';
 import DiaryEntries from './components/DiaryEntries';
-import { DiaryEntry } from './types';
-import { getAllEntries } from './services/diaryService';
+import { DiaryContextProvider } from './DiaryContext';
 
 const App = () => {
-	const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([]);
-
-	useEffect(() => {
-		getAllEntries().then((data) => {
-			setDiaryEntries(data);
-		});
-	}, []);
-
 	return (
-		<>
-			<DiaryEntries entries={diaryEntries} />
-		</>
+		<DiaryContextProvider>
+			<DiaryAddEntry />
+			<DiaryEntries />
+		</DiaryContextProvider>
 	);
 };
 
