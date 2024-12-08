@@ -42,6 +42,27 @@ const DiaryAddEntry = (): JSX.Element => {
 		});
 	};
 
+	const renderRadioButtons = (
+		groupName: 'visibility' | 'weather',
+		radioValues: Visibility[] | Weather[],
+	): JSX.Element => {
+		const radioButtonsDiv = radioValues.map((value) => {
+			return (
+				<div key={value}>
+					<input
+						type="radio"
+						id={value}
+						name={groupName}
+						onChange={() => setNewDiaryEntry({ ...newDiaryEntry, [groupName]: value })}
+					/>
+					<label htmlFor={value}>{value}</label>
+				</div>
+			);
+		});
+
+		return <div>{radioButtonsDiv}</div>;
+	};
+
 	return (
 		<>
 			<Notification {...notificationProps} />
@@ -49,21 +70,14 @@ const DiaryAddEntry = (): JSX.Element => {
 			<form onSubmit={diaryEntryCreation}>
 				date{' '}
 				<input
+					type="date"
 					value={newDiaryEntry.date}
 					onChange={(e) => setNewDiaryEntry({ ...newDiaryEntry, date: e.target.value })}
 				/>
 				<br />
-				visibility{' '}
-				<input
-					value={newDiaryEntry.visibility}
-					onChange={(e) => setNewDiaryEntry({ ...newDiaryEntry, visibility: e.target.value as Visibility | '' })}
-				/>
+				visibility {renderRadioButtons('visibility', Object.values(Visibility))}
 				<br />
-				weather{' '}
-				<input
-					value={newDiaryEntry.weather}
-					onChange={(e) => setNewDiaryEntry({ ...newDiaryEntry, weather: e.target.value as Weather | '' })}
-				/>
+				weather {renderRadioButtons('weather', Object.values(Weather))}
 				<br />
 				comment{' '}
 				<input
