@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 
-import { NewPatientEntry, NonSensitivePatientEntry, PatientEntry } from '../types';
+import { NewPatientEntry, NonSensitivePatientEntry, Patient, PatientEntry } from '../types';
 
 import patientService from '../services/patientService';
 import { NewPatientSchema } from '../utils';
@@ -28,6 +28,16 @@ const errorMiddleware = (error: unknown, _req: Request, res: Response, next: Nex
 
 router.get('/', (_req, res: Response<NonSensitivePatientEntry[]>) => {
 	res.send(patientService.getNonSensitiveEntries());
+});
+
+router.get('/:id', (req, res: Response<Patient>) => {
+	const patient = patientService.findById(req.params.id);
+
+	if (patient) {
+		res.send(patient);
+	} else {
+		res.sendStatus(404);
+	}
 });
 
 router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatientEntry>, res: Response<PatientEntry>) => {
