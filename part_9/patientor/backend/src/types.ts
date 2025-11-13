@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { NewPatientSchema } from './utils';
+import type { z } from 'zod';
+import type { NewPatientSchema } from './utils';
 
 export enum Gender {
 	Male = 'male',
@@ -22,21 +22,60 @@ export interface DiagnoseEntry {
 	latin?: string;
 }
 
-export interface PatientEntry {
+// export interface PatientEntry {
+// 	id: string;
+// 	name: string;
+// 	dateOfBirth: string;
+// 	ssn: string;
+// 	gender: Gender;
+// 	occupation: Occupation;
+// }
+
+// export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
+
+export type NewPatient = z.infer<typeof NewPatientSchema>;
+
+interface BaseEntry {
 	id: string;
-	name: string;
-	dateOfBirth: string;
-	ssn: string;
-	gender: Gender;
-	occupation: Occupation;
+	description: string;
+	date: string;
+	specialist: string;
+	diagnosisCodes?: Array<DiagnoseEntry['code']>;
 }
 
-export type NewPatientEntry = z.infer<typeof NewPatientSchema>;
+export enum HealthCheckRating {
+	Healthy = 0,
+	LowRisk = 1,
+	HighRisk = 2,
+	CriticalRisk = 3,
+}
 
-export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
+interface HealthCheckEntry extends BaseEntry {
+	type: 'HealthCheck';
+	healthCheckRating: HealthCheckRating;
+}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Entry {}
+interface OccupationalHealthcareEntry extends BaseEntry {
+	type: 'OccupationalHealthcare';
+	employerName: string;
+	sickLeave?: {
+		startDate: string;
+		endDate: string;
+	};
+}
+
+interface HospitalEntry extends BaseEntry {
+	type: 'Hospital';
+	discharge: {
+		date: string;
+		criteria: string;
+	};
+}
+
+export type Entry =
+	| HospitalEntry
+	| OccupationalHealthcareEntry
+	| HealthCheckEntry;
 
 export interface Patient {
 	id: string;

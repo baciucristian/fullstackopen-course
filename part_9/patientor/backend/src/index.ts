@@ -1,5 +1,5 @@
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 
 import diagnoseRouter from './routes/diagnoseRouter';
 import patientRouter from './routes/patientRouter';
