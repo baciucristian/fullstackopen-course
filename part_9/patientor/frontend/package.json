@@ -1,34 +1,36 @@
 {
-	"name": "frontend-new",
+	"name": "frontend",
 	"private": true,
 	"version": "0.0.0",
 	"type": "module",
 	"scripts": {
 		"dev": "vite",
-		"build": "tsc && vite build",
-		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+		"build": "tsc -b && vite build",
+		"lint": "biome lint ./src",
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@emotion/react": "^11.13.5",
-		"@emotion/styled": "^11.13.5",
-		"@mui/icons-material": "^5.16.7",
-		"@mui/material": "^5.16.7",
-		"axios": "^1.7.7",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
-		"react-router-dom": "^6.28.0"
+		"@radix-ui/react-avatar": "^1.1.11",
+		"@radix-ui/react-slot": "^1.2.4",
+		"@tailwindcss/vite": "^4.1.17",
+		"axios": "^1.13.2",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"lucide-react": "^0.553.0",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
+		"react-router": "^7.9.5",
+		"tailwind-merge": "^3.4.0",
+		"tailwindcss": "^4.1.17",
+		"tailwindcss-animate": "^1.0.7"
 	},
 	"devDependencies": {
-		"@types/react": "^18.3.12",
-		"@types/react-dom": "^18.3.1",
-		"@typescript-eslint/eslint-plugin": "^6.21.0",
-		"@typescript-eslint/parser": "^6.21.0",
-		"@vitejs/plugin-react": "^4.3.3",
-		"eslint": "^8.57.1",
-		"eslint-plugin-react-hooks": "^4.6.2",
-		"eslint-plugin-react-refresh": "^0.4.14",
-		"typescript": "^5.7.2",
-		"vite": "^5.4.11"
+		"@biomejs/biome": "2.3.5",
+		"@types/node": "^24.10.1",
+		"@types/react": "^19.2.3",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^5.1.1",
+		"typescript": "~5.9.3",
+		"vite": "^7.2.2"
 	}
 }

@@ -1,0 +1,16 @@
+meta {
+  name: patient :id
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://localhost:3001/api/patients/d2773822-f723-11e9-8f0b-362b9e155667
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
