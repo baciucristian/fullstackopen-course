@@ -1,7 +1,7 @@
 import { House, Mars, Venus } from 'lucide-react';
 import { type JSX, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
-import PatientDiagnose from '@/components/PatientDiagnose';
+import EntryDetails from '@/components/EntryDetails';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import api from '@/services/patients';
@@ -28,10 +28,8 @@ const Patient = (): JSX.Element => {
 		return <div>Loading...</div>;
 	}
 
-	const names: string[] = patientEntry.name.split(' ');
-
 	return (
-		<Card className="mx-auto max-w-[400px]">
+		<Card className="mx-auto max-w-100">
 			<CardHeader className="text-center">
 				<CardTitle className="text-xl">Patient</CardTitle>
 			</CardHeader>
@@ -65,16 +63,7 @@ const Patient = (): JSX.Element => {
 							<div className="space-y-2">
 								{patientEntry.entries.map((patientEntry) => {
 									return (
-										<div key={patientEntry.id} className="space-y-2">
-											<p className="text-muted-foreground text-sm">
-												{patientEntry.date} {patientEntry.description}
-											</p>
-											<div className="space-y-2">
-												{patientEntry.diagnosisCodes?.map((code) => {
-													return <PatientDiagnose code={code} key={code} />;
-												})}
-											</div>
-										</div>
+										<EntryDetails entry={patientEntry} key={patientEntry.id} />
 									);
 								})}
 							</div>
