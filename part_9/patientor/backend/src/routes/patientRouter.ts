@@ -8,15 +8,26 @@ import { z } from 'zod';
 
 import patientService from '../services/patientService';
 
-import type { NewPatient, NonSensitivePatient, Patient } from '../types';
+import type { Entry, NewPatient, NonSensitivePatient, Patient } from '../types';
 
-import { NewPatientSchema } from '../utils';
+import { IdSchema, NewEntrySchema, NewPatientSchema } from '../utils';
 
 const router = express.Router();
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
 	try {
 		NewPatientSchema.parse(req.body);
+		console.log(req.body);
+		next();
+	} catch (error: unknown) {
+		next(error);
+	}
+};
+
+const newEntryParser = (req: Request, _res: Response, next: NextFunction) => {
+	try {
+		NewEntrySchema.parse(req.body);
+		IdSchema.parse(req.params.id);
 		console.log(req.body);
 		next();
 	} catch (error: unknown) {
@@ -31,7 +42,9 @@ const errorMiddleware = (
 	next: NextFunction,
 ) => {
 	if (error instanceof z.ZodError) {
-		res.status(400).send({ error: error.issues });
+		const prettyEror = z.prettifyError(error);
+		// res.status(400).send({ error: error.issues });
+		res.status(400).send({ error: prettyEror });
 	} else {
 		next(error);
 	}
@@ -57,6 +70,20 @@ router.post(
 	(req: Request<unknown, unknown, NewPatient>, res: Response<NewPatient>) => {
 		const addedPatient = patientService.addPatient(req.body);
 		res.json(addedPatient);
+	},
+);
+
+router.post(
+	'/:id/entries',
+	newEntryParser,
+	(req: Request<{ id: string }, unknown, Entry>, res: Response<Entry>) => {
+		const addedEntry = patientService.addEntry(req.params.id, req.body);
+
+		if (addedEntry) {
+			res.json(addedEntry);
+		} else {
+			res.sendStatus(404);
+		}
 	},
 );
 

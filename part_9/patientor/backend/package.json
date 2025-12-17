@@ -3,12 +3,11 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"type": "module",
 	"scripts": {
 		"tsc": "tsc",
 		"dev": "tsx watch ./src/index.ts",
 		"lint": "biome lint",
-		"start": "node build/index.js"
+		"start": "set NODE_ENV=production && node build/src/index.js"
 	},
 	"keywords": [],
 	"author": "",

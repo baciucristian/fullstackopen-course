@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import type { NewPatientSchema } from './utils';
+import type { EntrySchema, IdSchema, NewPatientSchema } from './utils';
 
 export enum Gender {
 	Male = 'male',
@@ -16,32 +16,7 @@ export enum Occupation {
 	Other = 'Other',
 }
 
-export interface DiagnoseEntry {
-	code: string;
-	name: string;
-	latin?: string;
-}
-
-// export interface PatientEntry {
-// 	id: string;
-// 	name: string;
-// 	dateOfBirth: string;
-// 	ssn: string;
-// 	gender: Gender;
-// 	occupation: Occupation;
-// }
-
-// export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
-
 export type NewPatient = z.infer<typeof NewPatientSchema>;
-
-interface BaseEntry {
-	id: string;
-	description: string;
-	date: string;
-	specialist: string;
-	diagnosisCodes?: Array<DiagnoseEntry['code']>;
-}
 
 export enum HealthCheckRating {
 	Healthy = 0,
@@ -50,32 +25,9 @@ export enum HealthCheckRating {
 	CriticalRisk = 3,
 }
 
-interface HealthCheckEntry extends BaseEntry {
-	type: 'HealthCheck';
-	healthCheckRating: HealthCheckRating;
-}
+export type Entry = z.infer<typeof EntrySchema>;
 
-interface OccupationalHealthcareEntry extends BaseEntry {
-	type: 'OccupationalHealthcare';
-	employerName: string;
-	sickLeave?: {
-		startDate: string;
-		endDate: string;
-	};
-}
-
-interface HospitalEntry extends BaseEntry {
-	type: 'Hospital';
-	discharge: {
-		date: string;
-		criteria: string;
-	};
-}
-
-export type Entry =
-	| HospitalEntry
-	| OccupationalHealthcareEntry
-	| HealthCheckEntry;
+export type NewEntry = Omit<Entry, 'id'>;
 
 export interface Patient {
 	id: string;
@@ -88,3 +40,5 @@ export interface Patient {
 }
 
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
+
+export type Id = z.infer<typeof IdSchema>;

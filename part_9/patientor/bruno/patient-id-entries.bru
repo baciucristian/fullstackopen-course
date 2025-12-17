@@ -1,0 +1,26 @@
+meta {
+  name: patient:id/entries
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:3001/api/patients/d2773822-f723-11e9-8f0b-362b9e155667/entries
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "date": "2018-10-05",
+    "specialist": "MD House",
+    "type": "HealthCheck",
+    "description": "Yearly control visit. Due to high cholesterol levels recommended to eat more vegetables.",
+    "healthCheckRating": 1
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

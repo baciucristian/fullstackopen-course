@@ -1,7 +1,7 @@
 import type { Response } from 'express';
 import express from 'express';
 import diagnoseService from '../services/diagnoseService';
-import type { DiagnoseEntry } from '../types';
+import type { DiagnoseEntry } from '../utils';
 
 const router = express.Router();
 
