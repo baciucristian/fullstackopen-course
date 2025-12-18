@@ -13,7 +13,7 @@ const PatientDiagnose = ({ code }: PatientDiagnoseProps): JSX.Element => {
 
 	useEffect(() => {
 		apiDiagnoses.getByCode(code).then((data) => {
-			console.log(data);
+			// console.log(data);
 			setDiagnose(data);
 		});
 	}, [code]);
