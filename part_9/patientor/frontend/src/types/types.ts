@@ -32,42 +32,40 @@ const DiagnoseEntrySchema = z.object({
 
 export type DiagnoseEntry = z.infer<typeof DiagnoseEntrySchema>;
 
-const BaseEntrySchema = z
-	.object({
-		id: z.string(),
-		description: z.string(),
-		date: z.iso.date(),
-		specialist: z.string(),
-		diagnosisCodes: z.array(DiagnoseEntrySchema.shape.code).optional(),
-	})
-	.strict();
+const BaseEntrySchema = z.strictObject({
+	id: z.string(),
+	description: z.string().min(1, 'Description is required'),
+	date: z.iso.date(),
+	specialist: z.string().min(1, 'Specialist is required'),
+	diagnosisCodes: z.array(DiagnoseEntrySchema.shape.code).optional(),
+});
 
-const HospitalEntrySchema = BaseEntrySchema.extend({
+const HospitalEntrySchema = z.strictObject({
+	...BaseEntrySchema.shape,
 	type: z.literal('Hospital'),
-	discharge: z
-		.object({
-			date: z.iso.date(),
-			criteria: z.string(),
-		})
-		.strict(),
-}).strict();
+	discharge: z.strictObject({
+		date: z.iso.date(),
+		criteria: z.string().min(1, 'Discharge criteria is required'),
+	}),
+});
 
-const OccupationalHealthcareEntrySchema = BaseEntrySchema.extend({
+const OccupationalHealthcareEntrySchema = z.strictObject({
+	...BaseEntrySchema.shape,
 	type: z.literal('OccupationalHealthcare'),
-	employerName: z.string(),
+	employerName: z.string().min(1, 'Employer name is required'),
 	sickLeave: z
-		.object({
+		.strictObject({
 			startDate: z.iso.date(),
 			endDate: z.iso.date(),
 		})
-		.strict()
 		.optional(),
-}).strict();
+});
 
-const HealthCheckEntrySchema = BaseEntrySchema.extend({
+const HealthCheckEntrySchema = z.strictObject({
+	...BaseEntrySchema.shape,
 	type: z.literal('HealthCheck'),
 	healthCheckRating: z.enum(HealthCheckRating),
-}).strict();
+});
 
 export const EntrySchema = z.discriminatedUnion('type', [
 	HospitalEntrySchema,

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
-import { type JSX, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useForm } from 'react-hook-form';
 
@@ -39,6 +39,7 @@ const PatientForm = ({
 
 	const form = useForm<NewEntry>({
 		resolver: zodResolver(NewEntrySchema),
+		mode: 'onChange',
 		defaultValues: {
 			type: 'HealthCheck',
 			specialist: '',
@@ -49,8 +50,44 @@ const PatientForm = ({
 		},
 	});
 
+	const watchTypeField = form.watch('type');
+
+	useEffect(() => {
+		const commonValues = {
+			description: form.getValues('description'),
+			date: form.getValues('date'),
+			specialist: form.getValues('specialist'),
+			diagnosisCodes: form.getValues('diagnosisCodes'),
+		};
+
+		switch (watchTypeField) {
+			case 'HealthCheck':
+				form.reset({
+					...commonValues,
+					type: 'HealthCheck',
+					healthCheckRating: 0,
+				});
+				break;
+			case 'OccupationalHealthcare':
+				form.reset({
+					...commonValues,
+					type: 'OccupationalHealthcare',
+					employerName: '',
+					sickLeave: { startDate: '', endDate: '' },
+				});
+				break;
+			case 'Hospital':
+				form.reset({
+					...commonValues,
+					type: 'Hospital',
+					discharge: { date: '', criteria: '' },
+				});
+				break;
+		}
+	}, [watchTypeField, form]);
+
 	const onSubmit = async (values: NewEntry) => {
-		console.log('Form submitted for patientId:', values);
+		console.log('Form submitted:', values);
 
 		try {
 			const newEntry = await api.createNewEntry(patientId, values);
@@ -68,8 +105,6 @@ const PatientForm = ({
 			}
 		}
 	};
-
-	console.log('Rendering PatientForm for patientId:', patientId);
 
 	return (
 		<div className="mt-4">
@@ -99,10 +134,10 @@ const PatientForm = ({
 										</FormControl>
 										<SelectContent>
 											<SelectItem value="HealthCheck">Health Check</SelectItem>
-											{/* <SelectItem value="OccupationalHealthcare">
+											<SelectItem value="OccupationalHealthcare">
 												Occupational Healthcare
 											</SelectItem>
-											<SelectItem value="Hospital">Hospital</SelectItem> */}
+											<SelectItem value="Hospital">Hospital</SelectItem>
 										</SelectContent>
 									</Select>
 									<FormMessage />
@@ -117,7 +152,11 @@ const PatientForm = ({
 								<FormItem>
 									<FormLabel>Description</FormLabel>
 									<FormControl>
-										<Input placeholder="Description" {...field} />
+										<Input
+											placeholder="Description"
+											{...field}
+											value={field.value ?? ''}
+										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -152,30 +191,37 @@ const PatientForm = ({
 								<FormItem>
 									<FormLabel>Specialist</FormLabel>
 									<FormControl>
-										<Input placeholder="Specialist" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-
-						<FormField
-							control={form.control}
-							name="healthCheckRating"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Health Check Rating</FormLabel>
-									<FormControl>
 										<Input
-											placeholder="Health Check Rating"
+											placeholder="Specialist"
 											{...field}
-											onChange={(e) => field.onChange(Number(e.target.value))}
+											value={field.value ?? ''}
 										/>
 									</FormControl>
 									<FormMessage />
 								</FormItem>
 							)}
 						/>
+
+						{watchTypeField === 'HealthCheck' && (
+							<FormField
+								control={form.control}
+								name="healthCheckRating"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>Health Check Rating</FormLabel>
+										<FormControl>
+											<Input
+												placeholder="Health Check Rating"
+												{...field}
+												value={Number.isNaN(field.value) ? '' : field.value}
+												onChange={(e) => field.onChange(Number(e.target.value))}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						)}
 
 						<FormField
 							control={form.control}
@@ -198,6 +244,121 @@ const PatientForm = ({
 								</FormItem>
 							)}
 						/>
+
+						{watchTypeField === 'OccupationalHealthcare' && (
+							<>
+								<FormField
+									control={form.control}
+									name="employerName"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Employer</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Employer"
+													{...field}
+													value={field.value ?? ''}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<hr />
+
+								<p>Sick leave</p>
+
+								<FormField
+									control={form.control}
+									name="sickLeave.startDate"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Start</FormLabel>
+											<FormControl>
+												<DatePicker
+													selected={field.value ? new Date(field.value) : null}
+													onChange={(date: Date | null) =>
+														field.onChange(date?.toISOString().split('T')[0])
+													}
+													placeholderText="Select date"
+													className="w-full rounded border px-2 py-1"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="sickLeave.endDate"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>End</FormLabel>
+											<FormControl>
+												<DatePicker
+													selected={field.value ? new Date(field.value) : null}
+													onChange={(date: Date | null) =>
+														field.onChange(date?.toISOString().split('T')[0])
+													}
+													placeholderText="Select date"
+													className="w-full rounded border px-2 py-1"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</>
+						)}
+
+						{watchTypeField === 'Hospital' && (
+							<>
+								<hr />
+
+								<p>Discharge</p>
+
+								<FormField
+									control={form.control}
+									name="discharge.date"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Start</FormLabel>
+											<FormControl>
+												<DatePicker
+													selected={field.value ? new Date(field.value) : null}
+													onChange={(date: Date | null) =>
+														field.onChange(date?.toISOString().split('T')[0])
+													}
+													placeholderText="Select date"
+													className="w-full rounded border px-2 py-1"
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="discharge.criteria"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Criteria</FormLabel>
+											<FormControl>
+												<Input
+													placeholder="Criteria"
+													{...field}
+													value={field.value ?? ''}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</>
+						)}
 
 						<div className="flex justify-between">
 							<Button
