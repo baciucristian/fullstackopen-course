@@ -3,7 +3,6 @@ import { AxiosError } from 'axios';
 import { type JSX, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useForm } from 'react-hook-form';
-
 import { Button } from '@/components/ui/button';
 import {
 	Form,
@@ -14,15 +13,18 @@ import {
 	FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import api from '@/services/patients';
-import { type NewEntry, NewEntrySchema, type Patient } from '@/types/types';
 import {
 	Select,
 	SelectContent,
+	SelectGroup,
 	SelectItem,
+	SelectLabel,
 	SelectTrigger,
 	SelectValue,
-} from './ui/select';
+} from '@/components/ui/select';
+
+import api from '@/services/patients';
+import { type NewEntry, NewEntrySchema, type Patient } from '@/types/types';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -50,7 +52,8 @@ const PatientForm = ({
 		},
 	});
 
-	const watchTypeField = form.watch('type');
+	const type = form.watch('type');
+	const sickLeaveStartDate = form.watch('sickLeave.startDate');
 
 	useEffect(() => {
 		const commonValues = {
@@ -60,7 +63,7 @@ const PatientForm = ({
 			diagnosisCodes: form.getValues('diagnosisCodes'),
 		};
 
-		switch (watchTypeField) {
+		switch (type) {
 			case 'HealthCheck':
 				form.reset({
 					...commonValues,
@@ -84,7 +87,7 @@ const PatientForm = ({
 				});
 				break;
 		}
-	}, [watchTypeField, form]);
+	}, [type, form]);
 
 	const onSubmit = async (values: NewEntry) => {
 		console.log('Form submitted:', values);
@@ -171,10 +174,12 @@ const PatientForm = ({
 									<FormLabel>Date</FormLabel>
 									<FormControl>
 										<DatePicker
+											dateFormat="dd/MM/yyyy"
 											selected={field.value ? new Date(field.value) : null}
-											onChange={(date: Date | null) =>
-												field.onChange(date?.toISOString().split('T')[0])
+											onChange={(date) =>
+												field.onChange(date?.toLocaleDateString('en-CA'))
 											}
+											maxDate={new Date()}
 											placeholderText="Select date"
 											className="w-full rounded border px-2 py-1"
 										/>
@@ -202,7 +207,7 @@ const PatientForm = ({
 							)}
 						/>
 
-						{watchTypeField === 'HealthCheck' && (
+						{type === 'HealthCheck' && (
 							<FormField
 								control={form.control}
 								name="healthCheckRating"
@@ -210,12 +215,23 @@ const PatientForm = ({
 									<FormItem>
 										<FormLabel>Health Check Rating</FormLabel>
 										<FormControl>
-											<Input
-												placeholder="Health Check Rating"
-												{...field}
-												value={Number.isNaN(field.value) ? '' : field.value}
-												onChange={(e) => field.onChange(Number(e.target.value))}
-											/>
+											<Select
+												onValueChange={(value) => field.onChange(Number(value))}
+												value={String(field.value)}
+											>
+												<SelectTrigger className="w-45">
+													<SelectValue placeholder="Select a rating" />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectGroup>
+														<SelectLabel>Fruits</SelectLabel>
+														<SelectItem value="0">Healthy</SelectItem>
+														<SelectItem value="1">Low risk</SelectItem>
+														<SelectItem value="2">High risk</SelectItem>
+														<SelectItem value="3">Critical risk</SelectItem>
+													</SelectGroup>
+												</SelectContent>
+											</Select>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -245,7 +261,7 @@ const PatientForm = ({
 							)}
 						/>
 
-						{watchTypeField === 'OccupationalHealthcare' && (
+						{type === 'OccupationalHealthcare' && (
 							<>
 								<FormField
 									control={form.control}
@@ -277,10 +293,12 @@ const PatientForm = ({
 											<FormLabel>Start</FormLabel>
 											<FormControl>
 												<DatePicker
+													dateFormat="dd/MM/yyyy"
 													selected={field.value ? new Date(field.value) : null}
-													onChange={(date: Date | null) =>
-														field.onChange(date?.toISOString().split('T')[0])
+													onChange={(date) =>
+														field.onChange(date?.toLocaleDateString('en-CA'))
 													}
+													maxDate={new Date()}
 													placeholderText="Select date"
 													className="w-full rounded border px-2 py-1"
 												/>
@@ -298,9 +316,15 @@ const PatientForm = ({
 											<FormLabel>End</FormLabel>
 											<FormControl>
 												<DatePicker
+													dateFormat="dd/MM/yyyy"
 													selected={field.value ? new Date(field.value) : null}
-													onChange={(date: Date | null) =>
-														field.onChange(date?.toISOString().split('T')[0])
+													onChange={(date) =>
+														field.onChange(date?.toLocaleDateString('en-CA'))
+													}
+													minDate={
+														sickLeaveStartDate
+															? new Date(sickLeaveStartDate)
+															: undefined
 													}
 													placeholderText="Select date"
 													className="w-full rounded border px-2 py-1"
@@ -313,7 +337,7 @@ const PatientForm = ({
 							</>
 						)}
 
-						{watchTypeField === 'Hospital' && (
+						{type === 'Hospital' && (
 							<>
 								<hr />
 
@@ -327,10 +351,12 @@ const PatientForm = ({
 											<FormLabel>Start</FormLabel>
 											<FormControl>
 												<DatePicker
+													dateFormat="dd/MM/yyyy"
 													selected={field.value ? new Date(field.value) : null}
-													onChange={(date: Date | null) =>
-														field.onChange(date?.toISOString().split('T')[0])
+													onChange={(date) =>
+														field.onChange(date?.toLocaleDateString('en-CA'))
 													}
+													minDate={new Date()}
 													placeholderText="Select date"
 													className="w-full rounded border px-2 py-1"
 												/>
