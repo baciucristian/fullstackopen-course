@@ -20,10 +20,10 @@
 | 5   | Testing React apps                                           | 22/22             |
 | 6   | Advanced state management                                    | 24/24             |
 | 7   | React router, custom hooks, styling app with CSS and webpack | 8/21              |
-| 8   | GraphQL                                                      | WIP               |
-| 9   | TypeScript                                                   | 7/29              |
-| 10  | React Native                                                 | WIP               |
-| 11  | CI/CD                                                        | WIP               |
-| 12  | Containers                                                   | WIP               |
-| 13  | Using relational databases                                   | WIP               |
-|     | **Total**                                                    | **145/198 (73%)** |
+| 8   | GraphQL                                                      | WIP/26            |
+| 9   | TypeScript                                                   | 30/30             |
+| 10  | React Native                                                 | WIP/27            |
+| 11  | CI/CD                                                        | WIP/21            |
+| 12  | Containers                                                   | WIP/22            |
+| 13  | Using relational databases                                   | WIP/24            |
+|     | **Total**                                                    | **168/301 (56%)** |
