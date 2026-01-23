@@ -1,0 +1,22 @@
+meta {
+  name: updateBlog
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:3002/api/blogs/697388400d4a54d076c02a98
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "likes": 3000
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

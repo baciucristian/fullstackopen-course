@@ -1,0 +1,28 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3002/api/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "username": "BaciuNess",
+      "password": "Portugal"
+  }
+}
+
+script:post-response {
+  const bearerToken = res.body.token;
+  bru.setEnvVar("bearerToken", bearerToken);
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,20 @@
+meta {
+  name: deleteBlog
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:3002/api/blogs/5f4274fa1ec45f4ee8476cdf
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

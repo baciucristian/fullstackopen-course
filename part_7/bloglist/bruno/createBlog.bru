@@ -1,0 +1,29 @@
+meta {
+  name: createBlog
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:3002/api/blogs
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{bearerToken}}
+}
+
+body:json {
+  {
+      "title": "Will be a Falcon 10?",
+      "author": "Elon Musk",
+      "url": "https://www.wikipedia.org/en/",
+      "likes": 123
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

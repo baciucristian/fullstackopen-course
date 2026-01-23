@@ -1,0 +1,35 @@
+{
+	"name": "bloglist",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "cross-env NODE_ENV=production node index.js",
+		"dev": "cross-env NODE_ENV=development nodemon index.js",
+		"test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+		"start:test": "cross-env NODE_ENV=test node index.js"
+	},
+	"jest": {
+		"testEnvironment": "node"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"bcrypt": "^6.0.0",
+		"cors": "^2.8.6",
+		"cross-env": "^10.1.0",
+		"dotenv": "^17.2.3",
+		"express": "^5.2.1",
+		"jsonwebtoken": "^9.0.3",
+		"lodash": "^4.17.23",
+		"mongoose": "^9.1.5",
+		"morgan": "^1.10.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.11",
+		"jest": "^30.2.0",
+		"nodemon": "^3.1.11",
+		"supertest": "^7.2.2"
+	}
+}
