@@ -6,7 +6,11 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
-
+import {
+	useNotificationColor,
+	useNotificationControls,
+	useNotificationMessage,
+} from './stores/useNotificationStore';
 import type { BlogEntry, UserLogged } from './types/types';
 
 interface TogglableHandle {
@@ -19,8 +23,11 @@ const App = () => {
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [user, setUser] = useState<UserLogged | null>(null);
-	const [notificationMessage, setNotificationMessage] = useState<string>('');
-	const [notificationColor, setNotificationColor] = useState<string>('green');
+
+	const notificationMessage = useNotificationMessage();
+	const notificationColor = useNotificationColor();
+	const { setNotification, clearNotification } = useNotificationControls();
+
 	const blogFormRef = useRef<TogglableHandle>(null);
 
 	useEffect(() => {
@@ -46,27 +53,22 @@ const App = () => {
 		try {
 			const loginResponse = await loginService.login({ username, password });
 
-			window.localStorage.setItem(
-				'loggedBloglistUser',
-				JSON.stringify(loginResponse),
-			);
+			window.localStorage.setItem('loggedBloglistUser', JSON.stringify(loginResponse));
 
 			setUser(loginResponse);
 			setUsername('');
 			setPassword('');
 
-			setNotificationColor('green');
-			setNotificationMessage('Logged in!');
+			setNotification('Logged in!', 'green');
 			setTimeout(() => {
-				setNotificationMessage('');
+				clearNotification();
 			}, 5000);
 		} catch {
 			console.log('credentials invalid');
 
-			setNotificationColor('red');
-			setNotificationMessage('Wrong username or password!');
+			setNotification('Wrong username or password!', 'red');
 			setTimeout(() => {
-				setNotificationMessage('');
+				clearNotification();
 			}, 5000);
 		}
 	};
@@ -74,10 +76,9 @@ const App = () => {
 	const handleLogout = () => {
 		window.localStorage.removeItem('loggedBloglistUser');
 		setUser(null);
-		setNotificationColor('green');
-		setNotificationMessage('Logged out!');
+		setNotification('Logged out!', 'green');
 		setTimeout(() => {
-			setNotificationMessage('');
+			clearNotification();
 		}, 5000);
 	};
 
@@ -92,17 +93,15 @@ const App = () => {
 
 			setBlogs(blogs.concat(returnedBlog));
 
-			setNotificationColor('green');
-			setNotificationMessage('Blog created successfully!');
+			setNotification('Blog created successfully!', 'green');
 			setTimeout(() => {
-				setNotificationMessage('');
+				clearNotification();
 			}, 5000);
 		} catch {
 			console.log('Missing field');
-			setNotificationColor('red');
-			setNotificationMessage('Missing field!');
+			setNotification('Missing field!', 'red');
 			setTimeout(() => {
-				setNotificationMessage('');
+				clearNotification();
 			}, 5000);
 		}
 	};
@@ -134,9 +133,7 @@ const App = () => {
 			const blog = blogs.find((n) => n.id === id);
 			if (!blog) return;
 
-			const result = window.confirm(
-				`Remove blog ${blog.title} by ${blog.author}?`,
-			);
+			const result = window.confirm(`Remove blog ${blog.title} by ${blog.author}?`);
 			if (result) {
 				await blogService.deleteBlog(id);
 				setBlogs(blogs.filter((n) => n.id !== id));
