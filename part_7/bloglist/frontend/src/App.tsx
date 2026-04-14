@@ -6,20 +6,23 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import { useBlogActions, useBlogs, useBlogsToRender } from './stores/useBlogStore';
 import {
 	useNotificationColor,
 	useNotificationControls,
 	useNotificationMessage,
 } from './stores/useNotificationStore';
-import type { BlogEntry, UserLogged } from './types/types';
+import type { UserLogged } from './types/types';
 
 interface TogglableHandle {
 	toggleVisibility: () => void;
 }
 
 const App = () => {
-	const [blogs, setBlogs] = useState<BlogEntry[]>([]);
-	const [blogsToRender, setBlogsToRender] = useState<BlogEntry[]>([]);
+	const blogs = useBlogs();
+	const blogsToRender = useBlogsToRender();
+	const { setBlogs, setBlogsToRender } = useBlogActions();
+
 	const [username, setUsername] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [user, setUser] = useState<UserLogged | null>(null);
@@ -32,7 +35,7 @@ const App = () => {
 
 	useEffect(() => {
 		blogService.getAll().then((initialBlogs) => setBlogs(initialBlogs));
-	}, []);
+	}, [setBlogs]);
 
 	useEffect(() => {
 		const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser');
@@ -45,7 +48,7 @@ const App = () => {
 	useEffect(() => {
 		const sortedBlogsByLikes = [...blogs].sort((a, b) => a.likes - b.likes);
 		setBlogsToRender(sortedBlogsByLikes);
-	}, [blogs]);
+	}, [blogs, setBlogsToRender]);
 
 	const handleLogin = async (event: React.FormEvent) => {
 		event.preventDefault();
