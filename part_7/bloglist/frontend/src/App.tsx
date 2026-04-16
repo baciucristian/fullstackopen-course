@@ -6,6 +6,7 @@ import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import persistentUser from './services/persistentUser';
 import { useBlogActions, useBlogs, useBlogsToRender } from './stores/useBlogStore';
 import {
 	useNotificationColor,
@@ -39,7 +40,7 @@ const App = () => {
 	}, [setBlogs]);
 
 	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser');
+		const loggedUserJSON = persistentUser.getUser();
 		if (loggedUserJSON) {
 			const userFromLocalStorage = JSON.parse(loggedUserJSON);
 			setUser(userFromLocalStorage);
@@ -57,7 +58,7 @@ const App = () => {
 		try {
 			const loginResponse = await loginService.login({ username, password });
 
-			window.localStorage.setItem('loggedBloglistUser', JSON.stringify(loginResponse));
+			persistentUser.saveUser(loginResponse);
 
 			setUser(loginResponse);
 			setUsername('');
@@ -78,7 +79,7 @@ const App = () => {
 	};
 
 	const handleLogout = () => {
-		window.localStorage.removeItem('loggedBloglistUser');
+		persistentUser.removeUser();
 		setUser(null);
 		setNotification('Logged out!', 'green');
 		setTimeout(() => {

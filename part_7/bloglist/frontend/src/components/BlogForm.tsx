@@ -4,18 +4,28 @@ type BlogFormProps = {
 	createBlog: (title: string, author: string, url: string) => void;
 };
 
+const useField = (type: string) => {
+	const [value, setValue] = useState('');
+
+	const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setValue(event.target.value);
+	};
+
+	return {
+		type,
+		value,
+		onChange,
+	};
+};
+
 const BlogForm = ({ createBlog }: BlogFormProps): JSX.Element => {
-	const [title, setTitle] = useState('');
-	const [author, setAuthor] = useState('');
-	const [url, setUrl] = useState('');
+	const title = useField('text');
+	const author = useField('text');
+	const url = useField('text');
 
-	const addBlog = (event: React.FormEvent) => {
+	const addBlog = (event: React.SubmitEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		createBlog(title, author, url);
-
-		setTitle('');
-		setAuthor('');
-		setUrl('');
+		createBlog(title.value, author.value, url.value);
 	};
 
 	return (
@@ -23,28 +33,13 @@ const BlogForm = ({ createBlog }: BlogFormProps): JSX.Element => {
 			<h2>Create new blog</h2>
 			<form onSubmit={addBlog}>
 				<p>
-					Title:{' '}
-					<input
-						id="title"
-						value={title}
-						onChange={({ target }) => setTitle(target.value)}
-					/>
+					Title: <input id="title" {...title} />
 				</p>
 				<p>
-					Author:{' '}
-					<input
-						id="author"
-						value={author}
-						onChange={({ target }) => setAuthor(target.value)}
-					/>
+					Author: <input id="author" {...author} />
 				</p>
 				<p>
-					URL:{' '}
-					<input
-						id="url"
-						value={url}
-						onChange={({ target }) => setUrl(target.value)}
-					/>
+					URL: <input id="url" {...url} />
 				</p>
 				<button type="submit">Create</button>
 			</form>
