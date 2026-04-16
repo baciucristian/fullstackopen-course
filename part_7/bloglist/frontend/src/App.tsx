@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
@@ -12,7 +12,7 @@ import {
 	useNotificationControls,
 	useNotificationMessage,
 } from './stores/useNotificationStore';
-import type { UserLogged } from './types/types';
+import { usePassword, useUser, useUserActions, useUsername } from './stores/useUserStore';
 
 interface TogglableHandle {
 	toggleVisibility: () => void;
@@ -23,9 +23,10 @@ const App = () => {
 	const blogsToRender = useBlogsToRender();
 	const { setBlogs, setBlogsToRender } = useBlogActions();
 
-	const [username, setUsername] = useState<string>('');
-	const [password, setPassword] = useState<string>('');
-	const [user, setUser] = useState<UserLogged | null>(null);
+	const username = useUsername();
+	const password = usePassword();
+	const user = useUser();
+	const { setUsername, setPassword, setUser } = useUserActions();
 
 	const notificationMessage = useNotificationMessage();
 	const notificationColor = useNotificationColor();
@@ -43,7 +44,7 @@ const App = () => {
 			const userFromLocalStorage = JSON.parse(loggedUserJSON);
 			setUser(userFromLocalStorage);
 		}
-	}, []);
+	}, [setUser]);
 
 	useEffect(() => {
 		const sortedBlogsByLikes = [...blogs].sort((a, b) => a.likes - b.likes);
